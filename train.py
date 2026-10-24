@@ -111,6 +111,10 @@ def main():
 if __name__ == "__main__":
     main()
 
+plt.tight_layout()
+plt.savefig("results.png", dpi=150)
+plt.show()
+
 import os
 os.makedirs("results", exist_ok=True)
 ...
