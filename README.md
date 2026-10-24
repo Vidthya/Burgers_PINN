@@ -6,7 +6,7 @@ A PyTorch implementation of a Physics-Informed Neural Network (PINN) that solves
 
 
 
-Everything is in one notebook: Burgers\_PINN\_notebook.ipynb (solver, PINN, training, evaluation). Click the "Open in Colab" badge in the notebook to run it yourself.
+The code is in solver.py (finite-difference reference), pinn.py (network and loss) and train.py (training, evaluation and plots). See “How to run” below.
 
 
 
@@ -32,7 +32,7 @@ This is a good test because it is nonlinear and develops a sharp, near-discontin
 
 #### How it works
 
-The notebook has three parts.
+The code has three parts.
 
 1. Finite-difference reference solver. 
 An explicit scheme (upwind advection, central-difference diffusion) that produces a ground-truth solution on a 401 x 4001 grid.
@@ -43,7 +43,7 @@ A fully connected network (x, t) -> u (6 hidden layers, 32 units, tanh) trained 
 - Boundary condition: u(-1, t) = u(1, t) = 0.
 3. Evaluation.
 
-&#x20;  The trained network is evaluated on the same grid as the reference. The notebook reports L2 error and the maximum absolute error, and plots the solution, the error map, loss curves and snapshots at fixed times.
+&#x20;  The trained network is evaluated on the same grid as the reference. train.py reports L2 error and the maximum absolute error, and plots the solution, the error map, loss curves and snapshots at fixed times.
 
 #### 
 
@@ -51,7 +51,7 @@ A fully connected network (x, t) -> u (6 hidden layers, 32 units, tanh) trained 
 
 Trained for 8,000 Adam epochs (learning rate 1e-3), CPU only. Because training starts
 from random weights, the result depends on the random seed, so the same network was
-trained with six seeds in the notebook.
+trained with six seeds in the runs.
 
 | Seed | Relative L2 error | Max abs error | Final training loss |
 |---|---|---|---|
@@ -111,12 +111,14 @@ Details for seed 0:
 
 
 
-#### Running it
+#### How to run
 
-Open the notebook in Colab, then choose Runtime, Run all. It needs torch, numpy and matplotlib, which Colab provides. 
+pip install -r requirements.txt
+python train.py
 
-To run locally: pip install torch numpy matplotlib jupyter, then jupyter notebook Burgers\_PINN\_notebook.ipynb .
-
+This trains the PINN (8,000 Adam epochs, CPU), compares it with the finite-difference
+reference and saves results.png and snapshots.png. Seed 0 reproduces the table above
+(relative L2 error 4.47%, max absolute error 0.490).
 
 
 #### Possible extensions
