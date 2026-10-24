@@ -81,12 +81,32 @@ Because training starts from random weights, the result depends on the random se
 
 
 
-Relative L2 error: 2.5% to 11.1% across six seeds, mean 6.9%. Six seeds is a small sample, so this describes the spread seen here, not a guaranteed bound. A lower final training loss did not always mean a lower error against the reference (seed 2 has a higher final loss than seed 0 but a lower error).
+Relative L2 error: 2.70% to 10.19% across six seeds, mean 6.9%. Six seeds is a small sample, so this describes the spread seen here, not a guaranteed bound. A lower final training loss did not always mean a lower error against the reference (seed 2 has a higher final loss than seed 0 but a lower error).
 
 
 
-Most of the error sits at the sharp front near x = 0, which is the hardest region for a smooth network to fit.
+## Limitations
 
+- **Small sample.** Results come from six random seeds on a single architecture
+  (6 hidden layers of 32 units, tanh, 8,000 Adam epochs, learning rate 1e-3).
+  The seed-to-seed spread is large, with relative L2 error from 2.70% to 10.19%
+  (median 5.6%, mean 6.0%, SD 2.7), so the numbers above should not be read as
+  a precise accuracy figure for the method.
+- **Final loss does not rank the runs.** Seed 0 has the lowest final training
+  loss (6.5e-4) but not the lowest error, and seed 2 has a higher loss (1.15e-3)
+  with the lowest error (2.70%). With six seeds this is an observation, not a
+  conclusion, but training loss alone should not be used to choose a run.
+- **Errors are concentrated in ** The maximum absolute error ranges from 0.22
+  (seed 2) to 1.01 (seed 4). I have not tuned the network, the collocation points or the loss
+  weights to improve this.
+- **Not faster than a conventional solver.** On CPU, training takes about 610 s
+  against 0.30 s for the finite-difference reference. This project is a
+  demonstration of the PINN method on a problem with a known reference solution,
+  not a replacement for a numerical solver.
+- **Reference solver not independently verified.** The finite-difference solver
+  is my own implementation. 
+- **Single problem.** Only one viscosity and one set of initial and boundary
+  conditions were tested.
 
 
 #### Speed
