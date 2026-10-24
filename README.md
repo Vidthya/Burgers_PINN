@@ -2,7 +2,7 @@
 
 
 
-A PyTorch implementation of a Physics-Informed Neural Network (PINN) that solves the 1D viscous Burgers' equation using only the governing PDE and the initial and the boundary conditions. No simulator-generated training data is used inside the domain. The result is checked against a finite-difference reference solver.
+A PyTorch implementation of a Physics-Informed Neural Network (PINN) that solves the 1D viscous Burgers' equation using only the governing PDE and the initial and boundary conditions. No simulator-generated training data is used inside the domain. The result is checked against a finite-difference reference solver.
 
 
 
@@ -38,14 +38,14 @@ The code has three parts.
 An explicit scheme (upwind advection, central-difference diffusion) that produces a ground-truth solution on a 401 x 4001 grid.
 2. The PINN.
 A fully connected network (x, t) -> u (6 hidden layers, 32 units, tanh) trained on three loss terms:
-- PDE residual: at 10,000 random interior points, PyTorch autograd computes u\_t, u\_x and u\_xx of the network output, and the loss penalises any violation of u\_t + u\*u\_x - nu\*u\_xx =0.
+- PDE residual: at 10,000 random interior points, PyTorch autograd computes u\_t, u\_x and u\_xx of the network output, and the loss penalises any violation of u\_t + u\*u\_x - nu\*u\_xx = 0.
 - Initial condition: u(x, 0) matches -sin(pi x).
 - Boundary condition: u(-1, t) = u(1, t) = 0.
 3. Evaluation.
 
-&#x20;  The trained network is evaluated on the same grid as the reference. train.py reports L2 error and the maximum absolute error, and plots the solution, the error map, loss curves and snapshots at fixed times.
+The trained network is evaluated on the same grid as the reference. train.py reports L2 error and the maximum absolute error, and plots the solution, the error map, loss curves and snapshots at fixed times.
 
-#### 
+
 
 #### Results
 
@@ -66,7 +66,6 @@ trained with six seeds in the runs.
 range 2.70% to 10.19%. Relative L2 error is defined as
 ‖u_PINN − u_ref‖₂ / ‖u_ref‖₂, evaluated on the 401 × 4001 reference grid.
 
-![Seed 0: reference, PINN, error and training loss](results/seed0.png)
 
 *Seed 0 (relative L2 error 4.47%). Top: finite-difference reference and PINN
 prediction. Bottom left: absolute error. Bottom right: training loss.*
@@ -100,7 +99,7 @@ Details for seed 0:
 - **The reference solver resolves the shock only coarsely.** The reference is a
   first-order upwind scheme on a grid with dx = 0.005, while the shock width is of
   order 2ν ≈ 0.006. Part of the error near the shock may therefore come from the
-  reference, not only from the PINN. 
+  reference, not only from the PINN. A finer-grid rerun, or a comparison with the exact Cole–Hopf solution, has not yet been done.
 - **Not faster than a conventional solver.** The finite-difference solve takes
   0.30 s; training the PINN takes 610 s and evaluating it 2.2 s. For a simple,
   low-dimensional problem like this, classical numerical methods win on speed, and
