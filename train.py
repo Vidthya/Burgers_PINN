@@ -110,3 +110,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+import os
+os.makedirs("results", exist_ok=True)
+...
+plt.savefig("results/seed0.png", dpi=150)
+...
+plt.savefig("results/snapshots_seed0.png", dpi=150)
+plt.close("all")   
+
